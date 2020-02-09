@@ -23,11 +23,6 @@ public class Compte implements Sauvegardable{
 		this.solde = dos.readDouble();
 	}
 	
-	public Compte(String id, double solde) {
-		this.id = id;
-		this.solde = solde;
-	}
-	
 	public Compte(String id) {
 		this.id=id;	
 		this.solde=0.0;
@@ -67,7 +62,7 @@ public class Compte implements Sauvegardable{
 	 */
 	public void save(OutputStream out) throws IOException {
 		DataOutputStream dos = new DataOutputStream(out);
-		dos.writeUTF(this.getClass().getCanonicalName());
+		dos.writeUTF("Compte");
 	}
 	
 }
