@@ -6,18 +6,21 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 
 import srcs.banque.Compte;
 
 public class PersistanceTools {
 
 	/**
-	 * Sauvegarde l'ensemble des entiers de tab dans le fichier f
+	 * Sauvegarde l'ensemble des entiers d'un tableau dans un fichier
+	 * Parcours du tableau puis ecriture dans le fichier
+
 	 * @throws IOException 
 	 */
 	public static void saveArrayInt(String f, int[] tab) throws IOException{
+		//Creates a file output stream to write to the file with the specified name.
 		FileOutputStream os = new FileOutputStream(f);
-		//OutputStream out = new OutputStream(new FileOutputStream (f));
 		for(int i=0; i<tab.length; i++) {
 			os.write(tab[i]);
  		}
@@ -25,15 +28,17 @@ public class PersistanceTools {
 	}
 	
 	/**
-	 * charge à partir du fichier passé en param un tableau d'entier
-	 * @throws FileNotFoundException 
+	 * Enregistre dans un tableau les eléments contenant dans le fichier
+	 * 2 input: -1 pour compter le nb d'element dans le tableau
+	 * 			-1 pour lire ces éléments
+	 * @throws IOException 
 	 */
 	public static int[] loadArrayInt(String fichier) throws IOException {
+		//Creates a FileInputStream by opening a connection to an actual file
 		FileInputStream is = new FileInputStream(fichier);
 		FileInputStream is2 = new FileInputStream(fichier);
 		int i=0;
 		int cpt = 0;
-		//int[] tab = new int[5];
 		int entier;
 		
 		while(is.read()!=-1) {
@@ -44,7 +49,6 @@ public class PersistanceTools {
 		System.out.println("CPT = " + cpt + "\n");
 		is.close();
 		
-		//PB tab[i] = 0
 		while((entier=is2.read()) !=-1) {
 			System.out.println(" ENTIER = "+entier + "\n");
 			tab[i] = entier;
@@ -56,24 +60,56 @@ public class PersistanceTools {
 	}
 	
 	/**
-	 * Sauvegarde compte dans un fichier
+	 * Sauvegarde les données d'un compte dans un fichier (id && solde)
+	 * 
+	 * BUT de Data(Out/In)putStream => permet de recevoir et d'envoyer des données 
+	 * de type primitif(int,long..)
+	 * DataOutputStream(OutputStream out)
+	 * DataInputStream(InputStream in)
+	 * 
 	 */
 	public static void saveCompte(String f, Compte e) throws IOException{
 		FileOutputStream isf = new FileOutputStream(f);
 		DataOutputStream dos = new DataOutputStream(isf);
 		dos.writeUTF(e.getId());
+		dos.writeDouble(e.getSolde());
 	}
 	
 	/**
-	 * Instancie un Compte à partir des données du fichier
+	 * Instancie un Compte à partir des données du fichier format: string double
 	 */
 	public static Compte loadCompte(String f)throws IOException{
-		FileInputStream is = new FileInputStream(f);
-		DataInputStream dos = new DataInputStream(is);
-		String id =dos.readUTF();
 		
-		return new Compte(id);
+		return new Compte(new FileInputStream(f));
 	}
+	
+	/**
+	 * sauvegarder dans un fichier un objet Sauvegardable
+	 * getClass() => recup instance de la classe
+	 * getCanonicalName() => recup le nom de cette classe
+	 */
+	public void save(String fichier, Sauvegardable s) throws IOException {
+		FileOutputStream os = new FileOutputStream(fichier);
+		DataOutputStream dos = new DataOutputStream(os);
+		dos.writeUTF(s.getClass().getCanonicalName());
+		s.save(dos);
+		
+	}
+	
+	/**
+	 *  instancie un Sauvegardable à partir des données d’un fichier
+	 * @throws FileNotFoundException 
+	 */
+	public Sauvegardable load(String fichier) throws IOException{
+		FileInputStream is = new FileInputStream(fichier);
+		DataInputStream dos = new DataInputStream(is);
+		String name = dos.readUTF();
+		
+		return null;
+	}
+	
+	
+	
 
 	
 }

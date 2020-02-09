@@ -1,12 +1,12 @@
 package srcs.persistance.test;
 
 import static org.junit.Assert.*;
-import static srcs.persistance.PersistanceTools.*;
 
 import org.junit.Test;
 
 import srcs.banque.Compte;
-import srcs.persistance.Sauvegardable;
+import static srcs.persistances.PersistanceTools.*;
+import srcs.persistances.Sauvegardable;
 
 import java.io.IOException;
 public class SauvegardableTest {

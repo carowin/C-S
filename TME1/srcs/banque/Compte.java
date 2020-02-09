@@ -1,24 +1,31 @@
 package srcs.banque;
 
 import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-public class Compte implements Sauvegardable{
+import srcs.persistances.Sauvegardable;
 
-	
+public class Compte implements Sauvegardable{
 	
 	private final String id;
 	private double solde;
 	
-
 	/**
-	 * initialise un compte à partir d'un flux in 
+	 * Constructeur de compte qui initialise l'id du compte et le solde
+	 * du compte à partir du flux in 
 	 */
 	public Compte(InputStream in) throws IOException {
-		DataInputStream dos = new DataInputStream(in)
+		DataInputStream dos = new DataInputStream(in);
 		this.id = dos.readUTF();
+		this.solde = dos.readDouble();
+	}
+	
+	public Compte(String id, double solde) {
+		this.id = id;
+		this.solde = solde;
 	}
 	
 	public Compte(String id) {
@@ -54,18 +61,13 @@ public class Compte implements Sauvegardable{
 	public int hashCode() {
 		return id.hashCode();
 	}
-
-	@Override
-	public void save(OutputStream out) {
-		
-		
-	}
 	
-/*
+	/**
+	 * Ecris l'instance dans le flux out
+	 */
 	public void save(OutputStream out) throws IOException {
-		out.write((int)solde);
+		DataOutputStream dos = new DataOutputStream(out);
+		dos.writeUTF(this.getClass().getCanonicalName());
 	}
-
-*/	
 	
 }

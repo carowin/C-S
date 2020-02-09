@@ -10,8 +10,8 @@ import org.junit.Test;
 import srcs.banque.Banque;
 import srcs.banque.Client;
 import srcs.banque.Compte;
-import srcs.persistance.PersistanceTools;
-import srcs.persistance.Sauvegardable;
+import srcs.persistances.PersistanceTools;
+import srcs.persistances.Sauvegardable;
 
 public class Banque2Clients2ComptesTest {
 
