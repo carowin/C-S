@@ -20,6 +20,8 @@ public class Interpreteur {
 	public Interpreteur() {
 			map.put("Echo", Echo.class);
 			map.put("Exit", Exit.class);
+			map.put("Deploy", Deploy.class);
+			map.put("Undeploy", Undeploy.class);
 	}
 	
 	public void run() throws IOException, InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException, ClassNotFoundException {
@@ -42,6 +44,9 @@ public class Interpreteur {
 					}
 					if(cmd.equals("Exit")) {
 						object = Class.forName(cmd).getConstructor(int.class).newInstance(Integer.parseInt(split[1]));
+					}
+					if(cmd.equals("Deploy") || cmd.equals("Undeploy")) {
+						object = Class.forName(cmd).getConstructor(String.class,String.class, String.class).newInstance(split[1],split[2],split[3]);
 					}
 					Class.forName(cmd).getMethod("execute").invoke(object);
 				}else {
@@ -82,4 +87,27 @@ public class Interpreteur {
 		
 	}
 	
+	class Undeploy implements Command {
+		private String cmd;
+		private URLClassLoader path;
+		private String className;
+		URL[] tabUrl = new URL[1];
+		
+		public Undeploy(String cmd, String p, String className) {
+			this.cmd = cmd;
+			this.className = className;
+			try {
+				tabUrl[0] = new File(p).toURI().toURL();
+				path = new URLClassLoader(tabUrl);
+			} catch (MalformedURLException e) {
+				e.printStackTrace();
+			}
+		}
+		
+		@Override
+		public void execute() {
+			
+		}
+		
+	}
 }
