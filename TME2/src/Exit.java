@@ -1,10 +1,11 @@
+import java.util.List;
 
 public class Exit implements Command{
 
 	private int arg;
 	
-	public Exit(int arg) {
-		this.arg = arg;
+	public Exit(List<String> arg) {
+		this.arg = Integer.parseInt(arg.get(1));
 	}
 	
 	@Override
