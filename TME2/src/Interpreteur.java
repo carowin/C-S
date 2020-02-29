@@ -3,6 +3,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.lang.reflect.Array;
 import java.lang.reflect.InvocationTargetException;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -31,6 +32,7 @@ public class Interpreteur {
 		System.out.println("yo");
 		//String s=buff.readLine();
 		String s;
+		//Deploy Add /users/Etu5/3520765/TME2bis/bin Add
 		while((s = buff.readLine()) != "EOF") {
 			if(s != " ") {
 				//System.out.println(s);
@@ -39,16 +41,14 @@ public class Interpreteur {
 				Object object = null;
 				//if(map.containsKey(cmd.toLowerCase()) == true) {
 				if(map.containsKey(cmd) == true) {
-					if(cmd.equals("Echo")) {
+					if(cmd.equals("Deploy")) {
+						object = Class.forName(cmd).getConstructor(this.getClass(),List.class).newInstance(this,Arrays.asList(split));
+						Class.forName(cmd).getMethod("execute").invoke(object);
+					}
+					else {
 						object = Class.forName(cmd).getConstructor(List.class).newInstance(Arrays.asList(split));
+						Class.forName(cmd).getMethod("execute").invoke(object);
 					}
-					if(cmd.equals("Exit")) {
-						object = Class.forName(cmd).getConstructor(int.class).newInstance(Integer.parseInt(split[1]));
-					}
-					if(cmd.equals("Deploy") || cmd.equals("Undeploy")) {
-						object = Class.forName(cmd).getConstructor(String.class,String.class, String.class).newInstance(split[1],split[2],split[3]);
-					}
-					Class.forName(cmd).getMethod("execute").invoke(object);
 				}else {
 					new IllegalArgumentException("La commande n'existe pas");
 					System.out.println("ERROR no such a command");
@@ -64,48 +64,71 @@ public class Interpreteur {
 	 * (la map) afin d'ajouter/retirer une commande
 	 */
 	class Deploy implements Command {
-		private String cmd;
-		private URLClassLoader path;
+		private String cmd; //nom cmd
+		private URLClassLoader classLoader; //path
 		private String className;
 		URL[] tabUrl = new URL[1];
+		List<String> arg;
 		
-		public Deploy(String cmd, String p, String className) {
-			this.cmd = cmd;
-			this.className = className;
+		public Deploy(List<String> arg) {
+			this.arg = arg;
+			this.cmd = arg.get(1);
+			this.className = arg.get(3);
 			try {
-				tabUrl[0] = new File(p).toURI().toURL();
-				path = new URLClassLoader(tabUrl);
+				System.out.println("cc");
+				tabUrl[0] = new File(arg.get(2)).toURI().toURL();
+				System.out.println("cc");
+				classLoader = new URLClassLoader(tabUrl);
 			} catch (MalformedURLException e) {
 				e.printStackTrace();
 			}
 		}
 		
+		@SuppressWarnings("unchecked")
 		@Override
 		public void execute() {
-			
+			try {
+				System.out.println("cc");
+				Class<?> classe = classLoader.loadClass(className);
+				System.out.println("ccc");
+				map.put(cmd, (Class<? extends Command>) classe);
+				
+			} catch (ClassNotFoundException | IllegalArgumentException | SecurityException e) {
+				e.printStackTrace();
+			}
 		}
 		
 	}
 	
 	class Undeploy implements Command {
 		private String cmd;
-		private URLClassLoader path;
+		private URLClassLoader classLoader;
 		private String className;
 		URL[] tabUrl = new URL[1];
+		List<String> arg;
 		
-		public Undeploy(String cmd, String p, String className) {
-			this.cmd = cmd;
-			this.className = className;
+		public Undeploy(List<String> arg) {
+			this.arg = arg;
+			this.cmd = arg.get(1);
+			this.className = arg.get(3);
 			try {
-				tabUrl[0] = new File(p).toURI().toURL();
-				path = new URLClassLoader(tabUrl);
+				tabUrl[0] = new File(arg.get(2)).toURI().toURL();
+				classLoader = new URLClassLoader(tabUrl);
 			} catch (MalformedURLException e) {
 				e.printStackTrace();
 			}
 		}
 		
+		@SuppressWarnings("unchecked")
 		@Override
 		public void execute() {
+			try {
+				Class<?> classe = classLoader.loadClass(className);
+				map.remove(cmd, (Class<? extends Command>) classe);
+				
+			} catch (ClassNotFoundException | IllegalArgumentException | SecurityException e) {
+				e.printStackTrace();
+			}
 			
 		}
 		
