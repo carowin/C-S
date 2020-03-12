@@ -1,4 +1,4 @@
-package srcs.service.test;
+package service.test;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -17,17 +17,17 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import srcs.service.MyProtocolException;
-import srcs.service.ServeurMultithread;
-import srcs.service.VoidResponse;
-import srcs.service.annuaire.AnnuaireService;
-import srcs.service.calculatrice.Calculatrice.ResDiv;
-import srcs.service.calculatrice.CalculatriceService;
+import services.MyProtocolException;
+import services.ServeurMultiThread;
+import services.VoidResponse;
+import services.AnnuaireService;
+import services.Calculatrice.ResDiv;
+import services.CalculatriceService;
 
 public class TestService {
 
-	public static int portannuaire=4234;
-	public static int portcalculette=14234;
+	public static int portannuaire=4235;
+	public static int portcalculette=1424;
 	
 	private Thread annuaire;
 	private Thread calculette;
@@ -35,8 +35,20 @@ public class TestService {
 	@Before
 	public void setUp() throws Exception {
 		
-		annuaire =new Thread( () -> new ServeurMultithread(portannuaire, AnnuaireService.class).listen());
-		calculette =new Thread( () -> new ServeurMultithread(portcalculette, CalculatriceService.class).listen());
+		annuaire =new Thread( () -> {
+			try {
+				new ServeurMultiThread(portannuaire, AnnuaireService.class).listen();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		});
+		calculette =new Thread( () -> {
+			try {
+				new ServeurMultiThread(portcalculette, CalculatriceService.class).listen();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		});
 
 		annuaire.start();
 		calculette.start();
@@ -66,6 +78,7 @@ public class TestService {
 					Object ret = ois.readObject();
 					assertTrue(ret instanceof Integer);
 					int result = (Integer) ret;
+					System.out.println(result);
 					assertEquals(7, result);
 					
 				}

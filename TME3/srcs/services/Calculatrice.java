@@ -1,19 +1,24 @@
-package srcs.services;
+package services;
 
 public interface Calculatrice {
 	
-	public int add(int a, int b);
+	public Integer add(Integer a, Integer b);
 	
-	public int sous(int a, int b);
+	public Integer sous(Integer a, Integer b);
 	
-	public int mult(int a, int b);
+	public Integer mult(Integer a, Integer b);
 	
-	public ResDiv div(int a, int b);
+	public ResDiv div(Integer a, Integer b);
 	
 	
 	public static class ResDiv{
-		int quotient;
-		int reste;
+		Integer quotient;
+		Integer reste;
+		
+		public ResDiv(Integer quotient,Integer reste) {
+			this.quotient = quotient;
+			this.reste = reste;
+		}
 		
 		public int getQuotient() {
 			return quotient;

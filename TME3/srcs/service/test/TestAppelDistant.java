@@ -1,19 +1,22 @@
-package srcs.service.test;
+package service.test;
 
 import static org.junit.Assert.assertEquals;
+
+import java.io.IOException;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import srcs.service.ServeurMultithread;
-import srcs.service.annuaire.Annuaire;
-import srcs.service.annuaire.AnnuaireAppelDistant;
-import srcs.service.annuaire.AnnuaireProxy;
-import srcs.service.calculatrice.Calculatrice;
-import srcs.service.calculatrice.Calculatrice.ResDiv;
-import srcs.service.calculatrice.CalculatriceAppelDistant;
-import srcs.service.calculatrice.CalculatriceProxy;
+import services.ServeurMultiThread;
+import services.Service;
+import services.Annuaire;
+import services.AnnuaireAppelDistant;
+import services.AnnuaireProxy;
+import services.Calculatrice;
+import services.Calculatrice.ResDiv;
+import services.CalculatriceAppelDistant;
+import services.CalculatriceProxy;
 
 public class TestAppelDistant {
 
@@ -24,10 +27,25 @@ public class TestAppelDistant {
 	private Thread calculette;
 	
 	
+	@SuppressWarnings("unchecked")
 	@Before
 	public void setUp() throws Exception {
-		annuaire =new Thread( () -> new ServeurMultithread(portannuaire, AnnuaireAppelDistant.class).listen());
-		calculette =new Thread( () -> new ServeurMultithread(portcalculette, CalculatriceAppelDistant.class).listen());
+		annuaire =new Thread( () -> {
+			try {
+				new ServeurMultiThread(portannuaire, AnnuaireAppelDistant.class).listen();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		});
+		calculette =new Thread( () -> {
+			try {
+				new ServeurMultiThread(portcalculette, (Class<? extends Service>) CalculatriceAppelDistant.class).listen();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		});
 
 		annuaire.start();
 		calculette.start();

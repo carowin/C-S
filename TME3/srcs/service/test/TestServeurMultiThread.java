@@ -1,4 +1,4 @@
-package srcs.service.test;
+package service.test;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -12,10 +12,10 @@ import java.util.Set;
 import org.junit.Before;
 import org.junit.Test;
 
-import srcs.services.EtatGlobal;
-import srcs.services.SansEtat;
-import srcs.services.ServeurMultiThread;
-import srcs.services.Service;
+import services.ServeurMultiThread;
+import services.EtatGlobal;
+import services.SansEtat;
+import services.Service;
 
 public class TestServeurMultiThread {
 

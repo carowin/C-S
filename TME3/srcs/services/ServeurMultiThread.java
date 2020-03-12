@@ -1,4 +1,4 @@
-package srcs.services;
+package services;
 
 import java.io.IOException;
 import java.lang.annotation.Annotation;

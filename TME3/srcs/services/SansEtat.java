@@ -1,4 +1,4 @@
-package srcs.services;
+package services;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
