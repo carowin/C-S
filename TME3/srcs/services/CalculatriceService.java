@@ -8,6 +8,7 @@ import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 
+@SansEtat
 public class CalculatriceService implements Calculatrice, Service{
 	
 	public Integer add(Integer a, Integer b) {

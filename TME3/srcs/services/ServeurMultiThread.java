@@ -5,16 +5,25 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationTargetException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.concurrent.ExecutorService;
 
 public class ServeurMultiThread {
 	private final int port;
 	private final Class<? extends Service> classe;
 	private Service serv;
+	private ServerSocket s;
 	
 	public ServeurMultiThread(int port, Class<? extends Service> classe){
 		this.port = port;
 		this.classe = classe;
+		try {
+			this.s = new ServerSocket(port);
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
+		
 		for(Annotation anot : classe.getAnnotations()) {
+			System.out.println("yoyoy");
 			if(anot instanceof EtatGlobal) {
 				try {
 					this.serv = classe.newInstance();
@@ -26,8 +35,13 @@ public class ServeurMultiThread {
 		
 	}
 
+	/**
+	 * Instancie la socket d'écoute
+	 * Dans une boucle infini: -se met en attente sur la socket
+	 * 						   -A la reception d'une request appel methode getService()
+	 * 						   -Lance dans un nouveau thread la methode execute
+	 */
 	public void listen() throws IOException {
-		ServerSocket s = new ServerSocket(port);
 		while(true) {
 			Socket c = s.accept();
 			//reception d'une requete
@@ -39,9 +53,9 @@ public class ServeurMultiThread {
 			
 			th.start();
 			
-			c.close();
 		}
 	}
+	
 	
 	private Service getService() {
 		for(Annotation anot : classe.getAnnotations()) {
@@ -57,6 +71,6 @@ public class ServeurMultiThread {
 				}
 			}
 		}
-		throw new IllegalStateException();
+		throw new IllegalStateException("Erreur");
 	}
 }

@@ -24,6 +24,7 @@ public abstract class ClientProxy {
 	}
 	
 	public Object invokeService(String name, Object[] params) {
+		Object classe = null;
 		try {
 			Socket socket = new Socket(name, port);
 			ObjectOutputStream os = new ObjectOutputStream(socket.getOutputStream());
@@ -32,7 +33,7 @@ public abstract class ClientProxy {
 			for(int i=0; i<params.length; i++) {
 				os.writeObject(params[i]);
 			}
-			Object classe = is.readObject();
+			classe = is.readObject();
 			if(classe instanceof MyProtocolException) {
 				throw new MyProtocolException();
 			}
@@ -40,7 +41,7 @@ public abstract class ClientProxy {
 			e.printStackTrace();
 		}
 		
-		return params;
+		return classe;
 		
 	}
 }

@@ -26,8 +26,8 @@ import services.CalculatriceService;
 
 public class TestService {
 
-	public static int portannuaire=4235;
-	public static int portcalculette=1424;
+	public static int portannuaire=4252;
+	public static int portcalculette=1452;
 	
 	private Thread annuaire;
 	private Thread calculette;
@@ -49,7 +49,6 @@ public class TestService {
 				e.printStackTrace();
 			}
 		});
-
 		annuaire.start();
 		calculette.start();
 		Thread.sleep(200);
@@ -76,6 +75,7 @@ public class TestService {
 					oos.writeInt(3);
 					oos.flush();
 					Object ret = ois.readObject();
+					System.out.println("a");
 					assertTrue(ret instanceof Integer);
 					int result = (Integer) ret;
 					System.out.println(result);
@@ -164,7 +164,7 @@ public class TestService {
 			}
 		} 		
 	}
-	
+
 	
 	@Test
 	public void testAnnuaireSimple() throws UnknownHostException, IOException, ClassNotFoundException {
