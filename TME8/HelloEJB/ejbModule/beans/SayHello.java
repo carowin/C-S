@@ -16,9 +16,10 @@ public class SayHello implements SayHelloRemote {
     public SayHello() {
         // TODO Auto-generated constructor stub
     }
-    
-    public String hello(String name) {
-    	return "Hello "+name;
-    }
+
+	@Override
+	public String hello(String name) {
+	       return "Hello "+name;
+	}
 
 }
