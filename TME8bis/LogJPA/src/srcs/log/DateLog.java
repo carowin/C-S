@@ -1,10 +1,17 @@
 package srcs.log;
 
+import java.io.Serializable;
+import java.util.Calendar;
+
 import javax.persistence.Embeddable;
 
 @Embeddable
-public class DateLog {
+public class DateLog implements Serializable {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private int année;
 	private int mois;
 	private int jour;
@@ -12,6 +19,21 @@ public class DateLog {
 	private int minutes;
 	private int secondes;
 	private int millisecondes;
+	
+	
+	
+	public DateLog() {
+		super();
+		this.année = Calendar.getInstance().get(Calendar.YEAR);
+		this.mois = Calendar.getInstance().get(Calendar.MONTH);
+		this.jour = Calendar.getInstance().get(Calendar.DAY_OF_MONTH);
+		this.heure = Calendar.getInstance().get(Calendar.HOUR_OF_DAY);
+		this.minutes = Calendar.getInstance().get(Calendar.MINUTE);
+		this.secondes = Calendar.getInstance().get(Calendar.SECOND);
+		this.millisecondes = Calendar.getInstance().get(Calendar.MILLISECOND);
+	}
+	
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -25,6 +47,8 @@ public class DateLog {
 		result = prime * result + secondes;
 		return result;
 	}
+
+
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -50,6 +74,8 @@ public class DateLog {
 			return false;
 		return true;
 	}
+
+
 	@Override
 	public String toString() {
 		return "DateLog [année=" + année + ", mois=" + mois + ", jour=" + jour + ", heure=" + heure + ", minutes="
