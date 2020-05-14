@@ -71,10 +71,10 @@ public class LogReceiver implements LogReceiverRemote {
 	//pour un level donné, renvoie la liste de tous les logs associés
 	@Override
 	public List<Log> getLogsWithLevel(String level) {
-		Query q = em.createQuery("SELECT l FROM Log l");
-		Query query = em.createQuery("SELECT l FROM Log l WHERE l.level='"+level+"'");
+		Query query = em.createQuery("SELECT l FROM Log l WHERE l.level := my_value");
+		query.setParameter("my_value", level);
 		@SuppressWarnings("unchecked")
-		List<Log> l =q.getResultList();
+		List<Log> l = query.getResultList();
 		return l;
 	}
 
