@@ -28,16 +28,10 @@ public class LogReceiver implements LogReceiverRemote {
 
   //pour un log donné, l’ajoutera dans la base de données.
 	@Override
-	public boolean newLog(Integer id, String level, Machine machine) {
-		Log log = em.find(Log.class, id);
+	public boolean newLog(Log log) {
 		if(log != null){
 			return false;
 		}
-		log = new Log();
-		log.setId(id);
-		log.setDate(new DateLog());
-		log.setLevel(level);
-		log.setMachine(machine);
 		em.persist(log);
 		em.flush();
 		return true;
@@ -46,8 +40,8 @@ public class LogReceiver implements LogReceiverRemote {
 	//même traitement que newLog mais l’invocation se fait de manière asynchrone(ejb oriente msg)
 	@Override
 	@Asynchronous
-	public boolean newLogAsync(Integer id, String level, Machine macName) {
-		return newLog(id, level, macName);
+	public boolean newLogAsync(Log log) {
+		return newLog(log);
 	}
 
 	//renvoie un tableau de toutes les machines enregistrées dans la base
@@ -62,20 +56,21 @@ public class LogReceiver implements LogReceiverRemote {
 	//renvoie la liste de tous les logs de la base
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<Log> getLogs() {
+	public Log[] getLogs() {
 		Query q = em.createQuery("SELECT l FROM Log l");
-		List<Log> l =q.getResultList();
-		return l;
+		List<?> l =q.getResultList();
+		Log[] res=new Log[l.size()];
+		return l.toArray(res);
 	}
 
 	//pour un level donné, renvoie la liste de tous les logs associés
 	@Override
-	public List<Log> getLogsWithLevel(String level) {
+	public Log[] getLogsWithLevel(String level) {
 		Query query = em.createQuery("SELECT l FROM Log l WHERE l.level := my_value");
 		query.setParameter("my_value", level);
-		@SuppressWarnings("unchecked")
-		List<Log> l = query.getResultList();
-		return l;
+		List<?> l =query.getResultList();
+		Log[] res=new Log[l.size()];
+		return l.toArray(res);
 	}
 
 	//efface le contenu des tables Machine et Log

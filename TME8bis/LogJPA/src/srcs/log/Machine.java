@@ -20,7 +20,7 @@ public class Machine implements Serializable {
 	@Id
 	@GeneratedValue
 	private Integer id;
-	private String name;
+	private String nom;
 	private Collection<Log> logs;
 	private static final long serialVersionUID = 1L;
 
@@ -32,16 +32,12 @@ public class Machine implements Serializable {
 		return this.id;
 	}
 
-	public void setName(String name) {
-		this.name = name;
+	public void setNom(String nom) {
+		this.nom = nom;
 	}
 
-	public String getName() {
-		return name;
-	}
-
-	public void setId(Integer id) {
-		this.id = id;
+	public String getNom() {
+		return nom;
 	}
 	
 	@OneToMany(mappedBy="machine")
@@ -55,10 +51,8 @@ public class Machine implements Serializable {
 	
 	@Override
 	public String toString() {
-		return "Machine [id=" + id + ", name=" + name + "]";
+		return "Machine [id=" + id + ", nom=" + nom + "]";
 	}
 	
 
-	
-   
 }

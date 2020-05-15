@@ -24,15 +24,63 @@ public class DateLog implements Serializable {
 	
 	public DateLog() {
 		super();
-		this.année = Calendar.getInstance().get(Calendar.YEAR);
-		this.mois = Calendar.getInstance().get(Calendar.MONTH);
-		this.jour = Calendar.getInstance().get(Calendar.DAY_OF_MONTH);
-		this.heure = Calendar.getInstance().get(Calendar.HOUR_OF_DAY);
-		this.minutes = Calendar.getInstance().get(Calendar.MINUTE);
-		this.secondes = Calendar.getInstance().get(Calendar.SECOND);
-		this.millisecondes = Calendar.getInstance().get(Calendar.MILLISECOND);
+	}
+
+	public void setAnnée(int année) {
+		this.année = année;
 	}
 	
+	public void setMois(int mois) {
+		this.mois = mois;
+	}
+
+	public void setJour(int jour) {
+		this.jour = jour;
+	}
+
+	public void setHeure(int heure) {
+		this.heure = heure;
+	}
+
+	public void setMinutes(int minutes) {
+		this.minutes = minutes;
+	}
+
+	public void setSecondes(int secondes) {
+		this.secondes = secondes;
+	}
+
+	public void setMillisecondes(int millisecondes) {
+		this.millisecondes = millisecondes;
+	}
+
+	public int getAnnee() {
+		return année;
+	}
+
+	public int getMois() {
+		return mois;
+	}
+
+	public int getJour() {
+		return jour;
+	}
+
+	public int getHeure() {
+		return heure;
+	}
+
+	public int getMinute() {
+		return minutes;
+	}
+
+	public int getSeconde() {
+		return secondes;
+	}
+
+	public int getMilliseconde() {
+		return millisecondes;
+	}
 
 	@Override
 	public int hashCode() {
